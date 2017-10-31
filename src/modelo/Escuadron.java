@@ -2,7 +2,7 @@
 package modelo;
 
 
-public class Escuadron {
+public class Escuadron implements Comparable<Escuadron>{
     
     private String nombre;
     private int victorias;
@@ -48,7 +48,20 @@ public class Escuadron {
         this.nDefensa = nDefensa;
     }
     
-    
-    
+    @Override
+    public int compareTo(Escuadron e) {
+        if (this.victorias > e.getVictorias()) {
+            return -1;
+        } else if (this.victorias < e.getVictorias()) {
+            return 1;
+        } else {
+            return 0;
+        }
+    }
+
+    @Override
+    public String toString() {
+        return "Escuadron{" + "nombre=" + nombre + ", victorias=" + victorias + ", nAtaque=" + nAtaque + ", nDefensa=" + nDefensa + '}';
+    } 
     
 }

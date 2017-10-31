@@ -116,8 +116,14 @@ public class Herencia {
                 }
                 
                 System.out.println("<Fin batalla...>");
-                if(gana1 > gana2){System.out.println("<OK: La batalla la ha ganado el escuadron " + e1.getNombre() + " con " + gana1 + " asaltos>");}
-                else if(gana2 > gana1){System.out.println("<OK: La batalla la ha ganado el escuadron " + e2.getNombre() + " con " + gana2 + " asaltos>");}
+                if(gana1 > gana2){
+                    System.out.println("<OK: La batalla la ha ganado el escuadron " + e1.getNombre() + " con " + gana1 + " asaltos>");
+                    e1.setVictorias(e1.getVictorias()+1);
+                }else if(gana2 > gana1){
+                    System.out.println("<OK: La batalla la ha ganado el escuadron " + e2.getNombre() + " con " + gana2 + " asaltos>");
+                    e2.setVictorias(e2.getVictorias()+1);
+                }
+                
                 else{System.out.println("<OK: La batalla ha acabado en empate>");}
                 
             }else{
@@ -216,6 +222,23 @@ public class Herencia {
     public static void clasificacion(){
         System.out.println("< CLASIFICACION ACTUAL >");
         
+        Collections.sort(escuadronList);
+
+            int num;
+            if (escuadronList.size() < 3) {
+                num = 2;
+            } else {
+                num = escuadronList.size();
+            }
+
+            if (escuadronList.size() < 1) {
+                
+            } else {
+                for (int i = 0; i < num; i++) {
+                    System.out.println(escuadronList.get(i));
+                }
+            }
+                    
     }
     
     public static void salir(){
