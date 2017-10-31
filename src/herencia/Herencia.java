@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.Buffer;
 import java.util.ArrayList;
+import java.util.Collections;
 import modelo.Escuadron;
 import modelo.Protoss;
 import modelo.Terran;
@@ -19,7 +20,7 @@ public class Herencia {
     static ArrayList<Terran> terranList = new ArrayList<>();
     static ArrayList<Zerg> zergList = new ArrayList<>();
     
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args){
         
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         String[] array = null;
@@ -27,15 +28,15 @@ public class Herencia {
             try{
                 String opcion = br.readLine();
                 array = opcion.split(" ");
-                if(array[0].toUpperCase().equalsIgnoreCase("A")){
+                if(array[0].equalsIgnoreCase("A")){
                     altaEscuadron(array);
-                }else if(array[0].toUpperCase().equalsIgnoreCase("R")){
+                }else if(array[0].equalsIgnoreCase("R")){
                     registrarBatalla(array);
-                }else if(array[0].toUpperCase().equalsIgnoreCase("M")){
+                }else if(array[0].equalsIgnoreCase("M")){
                     mejorarEscuadron(array);
-                }else if(array[0].toUpperCase().equalsIgnoreCase("C")){
+                }else if(array[0].equalsIgnoreCase("C")){
                     clasificacion();
-                }else if(array[0].toUpperCase().equalsIgnoreCase("S")){
+                }else if(array[0].equalsIgnoreCase("S")){
                     salir();
                 }else{
                     System.out.println("< ERROR 004: Operación incorrecta >");
@@ -47,38 +48,53 @@ public class Herencia {
         
     }
 
-    public static void altaEscuadron(String[] array) throws ExceptionHerencia{
-        
-        String nombre = array[2];
+    public static void altaEscuadron(String[] array){
         int vict = 0;
-        if(isNumeric(array[3]) && isNumeric(array[4]) && isNumeric(array[5]) && isNumeric(array[6])){
-            int nAtq = Integer.parseInt(array[3]);
-            int nDef = Integer.parseInt(array[4]);
-            int hab1 = Integer.parseInt(array[5]);
-            int hab2 = Integer.parseInt(array[6]);
-            
-            if(array[1].toLowerCase().equalsIgnoreCase("terran")){
-                Terran t = new Terran(hab1, hab2, nombre, vict, nAtq, nDef);
-                escuadronList.add(t);
-                terranList.add(t);
-                System.out.println("< OK: Escuadrón registrado >");
-            }else if(array[1].toLowerCase().equalsIgnoreCase("zerg")){
-                Zerg z = new Zerg(hab1, hab2, nombre, vict, nAtq, nDef);
-                escuadronList.add(z);
-                zergList.add(z);
-                System.out.println("< OK: Escuadrón registrado >");
-            }else if(array[1].toLowerCase().equalsIgnoreCase("protoss")){
-                Protoss p = new Protoss(hab1, nombre, vict, nAtq, nDef);
-                escuadronList.add(p);
-                protossList.add(p);
-                System.out.println("< OK: Escuadrón registrado >");
+
+            if(array[1].equalsIgnoreCase("terran")){
+                if(array.length == 7){
+                    if(isNumeric(array[3]) && isNumeric(array[4]) && isNumeric(array[5]) && isNumeric(array[6])){
+                        Terran t = new Terran(Integer.parseInt(array[5]), Integer.parseInt(array[6]), array[2], vict, Integer.parseInt(array[3]), Integer.parseInt(array[4]));
+                        escuadronList.add(t);
+                        terranList.add(t);
+                        System.out.println("< OK: Escuadrón registrado >");
+                    }else{
+                        System.out.println("< ERROR 003: Dato incorrecto >");
+                    }    
+                }else{
+                    System.out.print("< ERROR 001: Nº de argumentos inválidos >");
+                }    
+            }else if(array[1].equalsIgnoreCase("zerg")){
+                if(array.length == 7){
+                    if(isNumeric(array[3]) && isNumeric(array[4]) && isNumeric(array[5]) && isNumeric(array[6])){
+                        Zerg z = new Zerg(Integer.parseInt(array[5]), Integer.parseInt(array[6]), array[2], vict, Integer.parseInt(array[3]), Integer.parseInt(array[4]));
+                        escuadronList.add(z);
+                        zergList.add(z);
+                        System.out.println("< OK: Escuadrón registrado >");
+                    }else{
+                        System.out.println("< ERROR 003: Dato incorrecto >");
+                    }    
+                }else{
+                    System.out.print("< ERROR 001: Nº de argumentos inválidos");                    
+                }    
+            }else if(array[1].equalsIgnoreCase("protoss")){
+                if(array.length == 6){
+                    if(isNumeric(array[3]) && isNumeric(array[4]) && isNumeric(array[5])){
+                        Protoss p = new Protoss(Integer.parseInt(array[5]), array[2], vict, Integer.parseInt(array[3]), Integer.parseInt(array[4]));
+                        escuadronList.add(p);
+                        protossList.add(p);
+                        System.out.println("< OK: Escuadrón registrado >");
+                    }else{
+                        System.out.print("< ERROR 003: Dato incorrecto >");
+                    }    
+                }else if(array.length != 6){
+                    System.out.print("< ERROR 001: Nº de argumentos inválidos");
+                }    
             }else{
                 System.out.println("< ERROR 002: Especie incorrecta >");
             }
             
-        }else{
-            System.out.println("< ERROR 003: Dato incorrecto >");
-        }    
+        
    
     }
     
@@ -220,25 +236,16 @@ public class Herencia {
     }
     
     public static void clasificacion(){
-        System.out.println("< CLASIFICACION ACTUAL >");
-        
-        Collections.sort(escuadronList);
-
-            int num;
-            if (escuadronList.size() < 3) {
-                num = 2;
-            } else {
-                num = escuadronList.size();
+        if(escuadronList.size() != 0){
+            System.out.println("< CLASIFICACION ACTUAL >");
+            Collections.sort(escuadronList);
+            for (int i = 0; i < 3; i++) {
+                System.out.println(escuadronList.get(i));
             }
-
-            if (escuadronList.size() < 1) {
-                
-            } else {
-                for (int i = 0; i < num; i++) {
-                    System.out.println(escuadronList.get(i));
-                }
-            }
-                    
+            
+        }else{
+            System.out.println("< CLASIFICACION: No hay escuadrones registrados >");
+        }            
     }
     
     public static void salir(){

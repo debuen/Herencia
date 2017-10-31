@@ -1,14 +1,12 @@
 
 package modelo;
 
-import excepciones.ExceptionHerencia;
-
 
 public class Protoss extends Escuadron{
     
     private int pilon;
 
-    public Protoss(int pilon, String nombre, int victorias, int nAtaque, int nDefensa) throws ExceptionHerencia {
+    public Protoss(int pilon, String nombre, int victorias, int nAtaque, int nDefensa){
         super(nombre, victorias, nAtaque, nDefensa);
         this.pilon = pilon;
     }
