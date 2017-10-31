@@ -1,6 +1,7 @@
 
 package herencia;
 
+import excepciones.ExceptionHerencia;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -25,7 +26,7 @@ public class Herencia {
         do{
             try{
                 String opcion = br.readLine();
-                array = opcion.split(" ");;
+                array = opcion.split(" ");
                 if(array[0].toUpperCase().equalsIgnoreCase("A")){
                     altaEscuadron(array);
                 }else if(array[0].toUpperCase().equalsIgnoreCase("R")){
@@ -36,6 +37,8 @@ public class Herencia {
                     clasificacion();
                 }else if(array[0].toUpperCase().equalsIgnoreCase("S")){
                     salir();
+                }else{
+                    System.out.println("< ERROR 004: Operación incorrecta >");
                 }
             }catch(Exception e){
                 
@@ -44,32 +47,39 @@ public class Herencia {
         
     }
 
-    public static void altaEscuadron(String[] array){
+    public static void altaEscuadron(String[] array) throws ExceptionHerencia{
         
         String nombre = array[2];
         int vict = 0;
-        int nAtq = Integer.parseInt(array[3]);
-        int nDef = Integer.parseInt(array[4]);
-        int hab1 = Integer.parseInt(array[5]);
-        int hab2 = Integer.parseInt(array[6]);
-        
-        if(array[1].toLowerCase().equalsIgnoreCase("terran")){
-            Terran t = new Terran(hab1, hab2, nombre, vict, nAtq, nDef);
-            escuadronList.add(t);
-            terranList.add(t);
-            System.out.println("< OK: Escuadrón registrado >");
-        }else if(array[1].toLowerCase().equalsIgnoreCase("zerg")){
-            Zerg z = new Zerg(hab1, hab2, nombre, vict, nAtq, nDef);
-            escuadronList.add(z);
-            zergList.add(z);
-            System.out.println("< OK: Escuadrón registrado >");
-        }else if(array[1].toLowerCase().equalsIgnoreCase("protoss")){
-            Protoss p = new Protoss(hab1, nombre, vict, nAtq, nDef);
-            escuadronList.add(p);
-            protossList.add(p);
-            System.out.println("< OK: Escuadrón registrado >");
-        }
-        
+        if(isNumeric(array[3]) && isNumeric(array[4]) && isNumeric(array[5]) && isNumeric(array[6])){
+            int nAtq = Integer.parseInt(array[3]);
+            int nDef = Integer.parseInt(array[4]);
+            int hab1 = Integer.parseInt(array[5]);
+            int hab2 = Integer.parseInt(array[6]);
+            
+            if(array[1].toLowerCase().equalsIgnoreCase("terran")){
+                Terran t = new Terran(hab1, hab2, nombre, vict, nAtq, nDef);
+                escuadronList.add(t);
+                terranList.add(t);
+                System.out.println("< OK: Escuadrón registrado >");
+            }else if(array[1].toLowerCase().equalsIgnoreCase("zerg")){
+                Zerg z = new Zerg(hab1, hab2, nombre, vict, nAtq, nDef);
+                escuadronList.add(z);
+                zergList.add(z);
+                System.out.println("< OK: Escuadrón registrado >");
+            }else if(array[1].toLowerCase().equalsIgnoreCase("protoss")){
+                Protoss p = new Protoss(hab1, nombre, vict, nAtq, nDef);
+                escuadronList.add(p);
+                protossList.add(p);
+                System.out.println("< OK: Escuadrón registrado >");
+            }else{
+                System.out.println("< ERROR 002: Especie incorrecta >");
+            }
+            
+        }else{
+            System.out.println("< ERROR 003: Dato incorrecto >");
+        }    
+   
     }
     
     public static void registrarBatalla(String[] array){
@@ -111,7 +121,7 @@ public class Herencia {
                 else{System.out.println("<OK: La batalla ha acabado en empate>");}
                 
             }else{
-                System.out.print("< ERROR 005: No existe especie con ese nombre >");
+                System.out.println("< ERROR 005: No existe especie con ese nombre >");
             }
             
         }else{
@@ -128,70 +138,75 @@ public class Herencia {
         int pos = 0;
         
         if(array.length == 4){
-            
-            if(e1 != null){
-                for(int i=0;i<escuadronList.size();i++){
-                    if(escuadronList.get(i).getNombre().equalsIgnoreCase(array[1])){
-                        posEscuadron = i;
-                        espEscuadron = escuadronList.get(i).getClass().getSimpleName().toLowerCase();
+            if(isNumeric(array[3])){
+                if(e1 != null){
+                    for(int i=0;i<escuadronList.size();i++){
+                        if(escuadronList.get(i).getNombre().equalsIgnoreCase(array[1])){
+                            posEscuadron = i;
+                            espEscuadron = escuadronList.get(i).getClass().getSimpleName().toLowerCase();
+                        }
                     }
-                }
-                
-                if(espEscuadron.equalsIgnoreCase("terran")){
-                    
-                    for(int i=0;i<terranList.size();i++){
-                            if(escuadronList.get(posEscuadron).getNombre().equalsIgnoreCase(terranList.get(i).getNombre())){
-                                i = pos;
-                            }
-                    }
-                    
-                    if(array[2].toLowerCase().equalsIgnoreCase("tecnologia")){
+
+                    if(espEscuadron.equalsIgnoreCase("terran")){
+
+                        for(int i=0;i<terranList.size();i++){
+                                if(escuadronList.get(posEscuadron).getNombre().equalsIgnoreCase(terranList.get(i).getNombre())){
+                                    i = pos;
+                                }
+                        }
+
+                        if(array[2].toLowerCase().equalsIgnoreCase("tecnologia")){
                                 terranList.get(pos).setTecnologias(Integer.parseInt(array[3]));
                                 System.out.println("<OK: Propiedad mejorada>");                            
-                    }else if(array[2].toLowerCase().equalsIgnoreCase("edificios")){
+                        }else if(array[2].toLowerCase().equalsIgnoreCase("edificios")){
                                 terranList.get(pos).setEdificios(Integer.parseInt(array[3]));
                                 System.out.println("<OK: Propiedad mejorada>");
+                        }else{
+                                System.out.println("< ERROR 006: Propiedad incorrecta>");
+                        }
+
                     }
-                   
-                }
-                
-                else if(espEscuadron.equalsIgnoreCase("protoss")){
-                    if(array[2].toLowerCase().equalsIgnoreCase("pilones")){
-                        for(int i=0;i<protossList.size();i++){
-                            if(escuadronList.get(posEscuadron).getNombre().equalsIgnoreCase(protossList.get(i).getNombre())){
-                                protossList.get(i).setPilon(Integer.parseInt(array[3]));
-                                System.out.println("<OK: Propiedad mejorada>");
+
+                    else if(espEscuadron.equalsIgnoreCase("protoss")){
+                        if(array[2].toLowerCase().equalsIgnoreCase("pilones")){
+                            for(int i=0;i<protossList.size();i++){
+                                if(escuadronList.get(posEscuadron).getNombre().equalsIgnoreCase(protossList.get(i).getNombre())){
+                                    protossList.get(i).setPilon(Integer.parseInt(array[3]));
+                                    System.out.println("<OK: Propiedad mejorada>");
+                                }
+                            }
+                        }else{
+                                System.out.println("< ERROR 006: Propiedad incorrecta>");
+                        }
+                    }
+
+                    else if(espEscuadron.equalsIgnoreCase("zerg")){
+
+                        for(int i=0;i<zergList.size();i++){
+                            if(escuadronList.get(posEscuadron).getNombre().equalsIgnoreCase(zergList.get(i).getNombre())){
+                                  i = pos;  
                             }
                         }
-                    }
-                }
-                
-                else if(espEscuadron.equalsIgnoreCase("zerg")){
-                    
-                    for(int i=0;i<zergList.size();i++){
-                        if(escuadronList.get(posEscuadron).getNombre().equalsIgnoreCase(zergList.get(i).getNombre())){
-                              i = pos;  
+
+                        if(array[2].toLowerCase().equalsIgnoreCase("esbirros")){                     
+                                    zergList.get(pos).setEsbirros(Integer.parseInt(array[3]));
+                                    System.out.println("<OK: Propiedad mejorada>");
                         }
-                    }
-                    
-                    if(array[2].toLowerCase().equalsIgnoreCase("esbirros")){                     
-                                zergList.get(pos).setEsbirros(Integer.parseInt(array[3]));
-                                System.out.println("<OK: Propiedad mejorada>");
-                    }
-                       
-                    else if(array[2].toLowerCase().equalsIgnoreCase("overlords")){
-                                zergList.get(pos).setOverlords(Integer.parseInt(array[3]));
-                                System.out.println("<OK: Propiedad mejorada>");
-                            
-                    }
-                } 
+                        else if(array[2].toLowerCase().equalsIgnoreCase("overlords")){
+                                    zergList.get(pos).setOverlords(Integer.parseInt(array[3]));
+                                    System.out.println("<OK: Propiedad mejorada>");       
+                        }else{
+                                System.out.println("< ERROR 006: Propiedad incorrecta>");
+                        }
+                    } 
+                }
+
+                else{
+                    System.out.println("< ERROR 005: No existe especie con ese nombre >");
+                }
+            }else{
+                System.out.println("< ERROR 003: Dato incorrecto >");
             }
-           
-            
-            else{
-                System.out.println("< ERROR 005: No existe especie con ese nombre >");
-            }
-            
         }else{
             System.out.print("< ERROR 001: Nº de argumentos inválidos >");
         }
@@ -204,7 +219,7 @@ public class Herencia {
     }
     
     public static void salir(){
-        
+        System.exit(0);
     }
     
     public static Escuadron buscarEscuadron(String nombre){
@@ -215,6 +230,13 @@ public class Herencia {
         }return null;
     }
     
-    
-    
+    private static boolean isNumeric(String cadena){
+	try {
+		Integer.parseInt(cadena);
+		return true;
+	} catch (NumberFormatException nfe){
+		return false;
+	}
+    }
+      
 }
