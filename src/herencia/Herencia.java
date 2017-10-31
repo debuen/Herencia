@@ -21,28 +21,29 @@ public class Herencia {
     public static void main(String[] args) throws IOException {
         
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        String opcion = br.readLine();
-        String[] array = opcion.split(" ");
+        String[] array = null;
+        do{
+            try{
+                String opcion = br.readLine();
+                array = opcion.split(" ");;
+                if(array[0].toUpperCase().equalsIgnoreCase("A")){
+                    altaEscuadron(array);
+                }else if(array[0].toUpperCase().equalsIgnoreCase("R")){
+                    registrarBatalla(array);
+                }else if(array[0].toUpperCase().equalsIgnoreCase("M")){
+                    mejorarEscuadron(array);
+                }else if(array[0].toUpperCase().equalsIgnoreCase("C")){
+                    clasificacion();
+                }else if(array[0].toUpperCase().equalsIgnoreCase("S")){
+                    salir();
+                }
+            }catch(Exception e){
+                
+            }
+        }while(!array[0].equalsIgnoreCase("S"));
         
-        switch(array[0].toUpperCase()){
-            case "A":
-                altaEscuadron(array);
-                break;
-            case "R":
-                registrarBatalla(array);
-                break;
-            case "M":
-                mejorarEscuadron(array);
-                break;
-            case "C":
-                clasificacion();
-                break;
-            case "S":
-                salir();
-            }while(!array[0].equalsIgnoreCase("S"));    
     }
-    
-    
+
     public static void altaEscuadron(String[] array){
         
         String nombre = array[2];
@@ -74,10 +75,7 @@ public class Herencia {
     public static void registrarBatalla(String[] array){
      
         if (array.length == 3) {
-            
-            int random1 = (int)(Math.random()*9 +0);
-            int random2 = (int)(Math.random()*9 +0);
-            
+  
             Escuadron e1 = buscarEscuadron(array[1]);
             Escuadron e2 = buscarEscuadron(array[2]);
             
@@ -87,6 +85,9 @@ public class Herencia {
                 
                 System.out.println("<Inicio batalla...>");
                 for (int i=0;i<5;i++){
+                    int random1 = (int)(Math.random()*9 +0);
+                    int random2 = (int)(Math.random()*9 +0);
+                    
                     System.out.println("Asalto nº " + (i+1));
                     int p1 = (random1 + e1.getnAtaque())- e2.getnDefensa();
                     int p2 = (random2 + e2.getnAtaque())- e1.getnDefensa();
@@ -105,8 +106,8 @@ public class Herencia {
                 }
                 
                 System.out.println("<Fin batalla...>");
-                if(gana1 > gana2){System.out.println("<OK: La batalla la ha ganado el escuadron " + e1.getNombre() + " con " + gana1 + "asaltos>");}
-                else if(gana2 > gana1){System.out.println("<OK: La batalla la ha ganado el escuadron " + e2.getNombre() + " con " + gana2 + "asaltos>");}
+                if(gana1 > gana2){System.out.println("<OK: La batalla la ha ganado el escuadron " + e1.getNombre() + " con " + gana1 + " asaltos>");}
+                else if(gana2 > gana1){System.out.println("<OK: La batalla la ha ganado el escuadron " + e2.getNombre() + " con " + gana2 + " asaltos>");}
                 else{System.out.println("<OK: La batalla ha acabado en empate>");}
                 
             }else{
@@ -137,11 +138,47 @@ public class Herencia {
                 
                 if(espEscuadron.equalsIgnoreCase("terran")){
                     if(array[2].toLowerCase().equalsIgnoreCase("tecnologia")){
-                        //escuadronList.get(posEscuadron).;
+                        for(int i=0;i<terranList.size();i++){
+                            if(escuadronList.get(posEscuadron).getNombre().equalsIgnoreCase(terranList.get(i).getNombre())){
+                                terranList.get(i).setTecnologias(Integer.parseInt(array[3]));
+                                System.out.println("<OK: Propiedad mejorada>");
+                            }
+                        }
                     }else if(array[2].toLowerCase().equalsIgnoreCase("edificios")){
-                        
+                        for(int i=0;i<terranList.size();i++){
+                            if(escuadronList.get(posEscuadron).getNombre().equalsIgnoreCase(terranList.get(i).getNombre())){
+                                terranList.get(i).setEdificios(Integer.parseInt(array[3]));
+                                System.out.println("<OK: Propiedad mejorada>");
+                            }
+                        }
+                    } 
+                }
+                else if(espEscuadron.equalsIgnoreCase("protoss")){
+                    if(array[2].toLowerCase().equalsIgnoreCase("pilones")){
+                        for(int i=0;i<protossList.size();i++){
+                            if(escuadronList.get(posEscuadron).getNombre().equalsIgnoreCase(protossList.get(i).getNombre())){
+                                protossList.get(i).setPilon(Integer.parseInt(array[3]));
+                                System.out.println("<OK: Propiedad mejorada>");
+                            }
+                        }
                     }
-                    System.out.println("<OK: Propiedad mejorada>");
+                }
+                else if(espEscuadron.equalsIgnoreCase("zerg")){
+                    if(array[2].toLowerCase().equalsIgnoreCase("esbirros")){
+                        for(int i=0;i<zergList.size();i++){
+                            if(escuadronList.get(posEscuadron).getNombre().equalsIgnoreCase(zergList.get(i).getNombre())){
+                                zergList.get(i).setEsbirros(Integer.parseInt(array[3]));
+                                System.out.println("<OK: Propiedad mejorada>");
+                            }
+                        }
+                    }else if(array[2].toLowerCase().equalsIgnoreCase("overlords")){
+                        for(int i=0;i<zergList.size();i++){
+                            if(escuadronList.get(posEscuadron).getNombre().equalsIgnoreCase(zergList.get(i).getNombre())){
+                                zergList.get(i).setOverlords(Integer.parseInt(array[3]));
+                                System.out.println("<OK: Propiedad mejorada>");
+                            }
+                        }
+                    } 
                 }
                 
                 
@@ -151,12 +188,13 @@ public class Herencia {
             }
             
         }else{
-            System.out.print("< ERROR 001: Nº de argumentos inválidos");
+            System.out.print("< ERROR 001: Nº de argumentos inválidos >");
         }
         
     }
     
     public static void clasificacion(){
+        System.out.println("< CLASIFICACION ACTUAL >");
         
     }
     
